@@ -49,11 +49,11 @@ do {
             $NTP->referenceIdentifier = ip2long('127.127.1.0'); // 'LOCL' is valid too
             
             // The current timestamp
-            $now = time();
-            $NTP->referenceTimestamp = NTPLite::convertTsUnixToSntp($now);
+            $now = new DateTime(NULL);
+            $NTP->referenceTimestamp = NTPLite::convertDateTimeToSntp($now);
             $NTP->originateTimestamp = $NTP->transmitTimestamp; // re-uses the transmit TS
-            $NTP->receiveTimestamp   = NTPLite::convertTsUnixToSntp($now);
-            $NTP->transmitTimestamp  = NTPLite::convertTsUnixToSntp($now);
+            $NTP->receiveTimestamp   = NTPLite::convertDateTimeToSntp($now);
+            $NTP->transmitTimestamp  = NTPLite::convertDateTimeToSntp($now);
             
             // Sends the response
             stream_socket_sendto($socket, $NTP->writeMessage(), 0, $from);

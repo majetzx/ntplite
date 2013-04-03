@@ -36,7 +36,7 @@
  * @copyright  2006-2013 MAJe / TenZenXen
  * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @link       http://github.com/majetzx/ntplite
- * @version    1.4 (2006-08-02)
+ * @version    1.5 (2013-04-03)
  */
 
 /**
@@ -46,7 +46,7 @@
  * 
  * The 4 timestamps (Reference, Originate, Receive and Transmit) are not usual Unix
  * timestamps, they use the 01/01/1900 as epoch. They can be converted to and from
- * Unix timestamps using convertTsUnixToSntp() and convertTsSntpToUnix() methods.
+ * DateTime objects using convertTsUnixToSntp() and convertTsSntpToUnix() methods.
  * 
  * @package NTPLite
  * @since   1.0
@@ -668,33 +668,33 @@ class NTPLite
     /* PUBLIC STATIC METHODS, to do timestamp conversions */
     
     /**
-     * Converts a Unix timestamp into an SNTP timestamp.
+     * Converts a DateTime object into an SNTP timestamp.
      * 
-     * @param integer $uTimestamp the Unix timestamp
+     * @param object $oTimestamp the DateTime object
      * 
      * @return integer the SNTP timestamp
      * 
      * @since 1.0
      */
-    public static function convertTsUnixToSntp($uTimestamp)
+    public static function convertDateTimeToSntp($oTimestamp)
     {
         // Changes the timestamp base, and converts into milliseconds
-        return ($uTimestamp + self::SNTP_TO_UNIX_TS_INTERVAL) * 1000;
+        return ($oTimestamp->getTimestamp() + self::SNTP_TO_UNIX_TS_INTERVAL) * 1000;
     }
     
     /**
-     * Converts an SNTP timestamp into a Unix timestamp.
+     * Converts an SNTP timestamp into a DateTime object.
      * 
      * @param integer $sTimestamp the SNTP timestamp
      * 
-     * @return integer the Unix timestamp
+     * @return object the DateTime object
      * 
      * @since 1.0
      */
-    public static function convertTsSntpToUnix( $sTimestamp )
+    public static function convertSntpToDateTime($sTimestamp)
     {
         // Converts into seconds, and changes the timestamp base
-        return ($sTimestamp / 1000) - self::SNTP_TO_UNIX_TS_INTERVAL;
+        return new DateTime('@' . (int) (($sTimestamp / 1000) - self::SNTP_TO_UNIX_TS_INTERVAL));
     }
     
     
@@ -769,22 +769,22 @@ class NTPLite
         
         // Reference timestamp
         $string .= 'ReferenceTS='
-                .  sprintf('%-24s', $this->timestampToString($this->referenceTimestamp))
+                .  sprintf('%-26s', $this->timestampToString($this->referenceTimestamp))
                 .  '    ';
         
         // Originate timestamp
         $string .= 'OriginateTS='
-                .  sprintf('%-24s', $this->timestampToString($this->originateTimestamp))
+                .  sprintf('%-26s', $this->timestampToString($this->originateTimestamp))
                 .  "\r\n";
         
         // Receive timestamp
         $string .= '  ReceiveTS='
-                .  sprintf('%-24s', $this->timestampToString($this->receiveTimestamp))
+                .  sprintf('%-26s', $this->timestampToString($this->receiveTimestamp))
                 .  '    ';
         
         // Transmit timestamp
         $string .= ' TransmitTS='
-                .  sprintf('%-24s', $this->timestampToString($this->transmitTimestamp))
+                .  sprintf('%-26s', $this->timestampToString($this->transmitTimestamp))
                 .  "\r\n";
         
         // Authentication: Key identifier & Message digest
@@ -800,13 +800,12 @@ class NTPLite
     /**
      * Returns a string representation of an SNTP timestamp.
      * 
-     * The date()-function format is 'Y-m-d H:i:s', for the integer part.
-     * The fraction part is sprintf()-formatted with '%04d'.
-     * For example: "2006-08-02 08:39:04.8996".
+     * The date() function format is 'Y-m-d H:i:s.u'.
+     * For example: "2006-08-02 08:39:04.899678".
      * 
      * If the timestamp is null, it will return the string "NULL".
      * 
-     * @param integer $sTimestamp the timestamp to convert
+     * @param integer $sTimestamp the SNTP timestamp to convert
      * 
      * @return string the timestamp as a string
      * 
@@ -818,16 +817,9 @@ class NTPLite
         if ($sTimestamp == 0) {
             return 'NULL';
         } else {
-            // Converts the SNTP timestamp to a Unix timestamp
-            $uTimestamp = NTPLite::convertTsSntpToUnix($sTimestamp);
-            
-            // Separates the integer part (seconds) and the fraction part (milliseconds)
-            $integerPart = floor($uTimestamp);
-            $fractionPart = round(($uTimestamp - $integerPart) * 10000);
-            
-            // Timestamps are UTC, so use gmdate
-            return gmdate('Y-m-d H:i:s', $integerPart) . '.'
-                 . sprintf('%04d', $fractionPart) . '';
+            // Converts the SNTP timestamp to a DateTime object
+            $oTimestamp = NTPLite::convertSntpToDateTime($sTimestamp);
+            return $oTimestamp->format('Y-m-d H:i:s.u');
         }
     }
     

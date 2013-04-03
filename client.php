@@ -47,13 +47,15 @@ fwrite($socket, $query);
 // Tries to read the server response
 $response = fread($socket, 1500);
 if ($NTP->readMessage($response)) {
-    $cNow = time(); // client time
+    $cNow = new DateTime(); // client time
     echo "Response:\n", $NTP;
     // Displays the server time (SNTP uses UTC timestamps)
-    $sNow = NTPLite::convertTsSntpToUnix($NTP->transmitTimestamp);
-    echo "\nThe UTC server time is:   " . gmdate('l j F Y, H:i:s e', $sNow);
-    echo "\nYour local time is:       " .   date('l j F Y, H:i:s e', $sNow);
-    echo "\nThis local clock is: " . ($cNow==$sNow ? 'OK ' : 'ERR') . ", " .   date('l j F Y, H:i:s e', $cNow);
+    $sNow = NTPLite::convertSntpToDateTime($NTP->transmitTimestamp);
+    $sNowLoc = clone $sNow;
+    $sNowLoc->setTimezone(new DateTimeZone('Europe/Paris'));
+    echo "\nThe UTC server time is:   " . $sNow->format('l j F Y, H:i:s e');
+    echo "\nYour local time is:       " . $sNowLoc->format('l j F Y, H:i:s e');
+    echo "\nThis local clock is: " . ($cNow==$sNowLoc ? 'OK ' : 'ERR') . ", " . $cNow->format('l j F Y, H:i:s e');
     echo "\n";
 } else {
     echo "Failed to read server response\n";
