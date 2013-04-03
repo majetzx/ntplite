@@ -1,6 +1,6 @@
 <?php
 /**
- * NTPLite -- A basic SNTPv4 implementation
+ * NTPLite -- A basic SNTPv4 PHP implementation
  * 
  * The NTPLite class represents an SNTP message, to build simple SNTP client/server.
  * Not all RFC 2030 features are available, but it can easily read and write SNTP
@@ -33,9 +33,9 @@
  * 
  * @package    NTPLite
  * @author     Jerome Marilleau
- * @copyright  2006 MAJe / TenZenXen
+ * @copyright  2006-2013 MAJe / TenZenXen
  * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
- * @link       http://www.tenzenxen.org/ntplite
+ * @link       http://github.com/majetzx/ntplite
  * @version    1.4 (2006-08-02)
  */
 
