@@ -4,8 +4,7 @@
 require_once 'NTPLite.php';
 
 // The server address
-//$address = '127.0.0.1';
-$address = '0.pool.ntp.org';
+$address = '127.0.0.1';
 $port = 123;
 
 // Opens the socket to the SNTP server, uses UDP datagrams
