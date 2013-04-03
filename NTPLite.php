@@ -2,16 +2,16 @@
 /**
  * NTPLite -- A basic SNTPv4 PHP implementation
  * 
- * The NTPLite class represents an SNTP message, to build simple SNTP client/server.
- * Not all RFC 2030 features are available, but it can easily read and write SNTP
- * messages.
+ * The NTPLite class represents an SNTP message, to build simple SNTP clients
+ * or servers. Some RFC 4330 features are not available, but this class can
+ * easily read and write SNTP messages.
  * 
- * Please note that, used in the case of a server, NTPLite does not perform any
- * computation (precision, delay, dispersion, etc.). It just reads and writes
- * messages, you then have to use them yourself.
+ * Please note that, used in a server, NTPLite does not perform any computation
+ * (precision, delay, dispersion, etc.). It just reads and writes messages, you
+ * then have to use them by yourself.
  * 
- * It is recommended to read RFC 1305 and 2030 to understand the (S)NTP protocol.
- * This class is bundled with client and server sample scripts.
+ * It is recommended to read RFC 5905 and 4330 to understand the (S)NTP
+ * protocol. This class is bundled with client and server sample scripts.
  * 
  * 
  * LICENSE:
@@ -42,7 +42,7 @@
 /**
  * The NTPLite class represents an SNTP message.
  * 
- * Member variables comments come from the RFC 2030.
+ * Member variables comments come from the RFC 4330.
  * 
  * The 4 timestamps (Reference, Originate, Receive and Transmit) are not usual Unix
  * timestamps, they use the 01/01/1900 as epoch. They can be converted to and from
@@ -78,7 +78,7 @@ class NTPLite
     const SNTP_TO_UNIX_TS_INTERVAL = 2208988800;
     
     
-    /* PUBLIC MEMBERS, from RFC 2030 */
+    /* PUBLIC MEMBERS, from RFC 4330 */
     
     /**
      * Leap indicator (LI).
@@ -211,7 +211,7 @@ class NTPLite
      * servers, this is the low order 32 bits of the latest transmit timestamp of
      * the reference source. NTP primary (stratum 1) servers should set this field
      * to a code identifying the external reference source according to [a list
-     * available in RFC 2030]. If the external reference is one of those listed, the
+     * available in RFC 4330]. If the external reference is one of those listed, the
      * associated code should be used. Codes for sources not listed can be contrived
      * as appropriate.
      * 
@@ -278,7 +278,7 @@ class NTPLite
      * 
      * When the NTP authentication scheme is implemented, the Key Identifier field
      * contain the message authentication code (MAC) information defined in Appendix
-     * C of RFC-1305.
+     * C of RFC 1305.
      * 
      * @var   integer
      * @since 1.3
@@ -290,7 +290,7 @@ class NTPLite
      * 
      * When the NTP authentication scheme is implemented, the Message Digest field
      * contain the message authentication code (MAC) information defined in Appendix
-     * C of RFC-1305.
+     * C of RFC 1305.
      * 
      * @var   integer
      * @since 1.3
