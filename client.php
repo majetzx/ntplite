@@ -4,7 +4,8 @@
 require_once 'NTPLite.php';
 
 // The server address
-$address = '127.0.0.1';
+//$address = '127.0.0.1';
+$address = '0.pool.ntp.org';
 $port = 123;
 
 // Opens the socket to the SNTP server, uses UDP datagrams
@@ -47,12 +48,14 @@ fwrite($socket, $query);
 // Tries to read the server response
 $response = fread($socket, 1500);
 if ($NTP->readMessage($response)) {
+    $cNow = time(); // client time
     echo "Response:\n", $NTP;
-    // Displays the server time
-    $now = NTPLite::convertTsSntpToUnix($NTP->transmitTimestamp);
-    // SNTP uses UTC timestamps
-    echo "\nThe server time (UTC) is: " . gmdate('l j F Y, H:i:s e', $now);
-    echo "\nSet your local clock to:  " .   date('l j F Y, H:i:s e', $now) . "\n";
+    // Displays the server time (SNTP uses UTC timestamps)
+    $sNow = NTPLite::convertTsSntpToUnix($NTP->transmitTimestamp);
+    echo "\nThe UTC server time is:   " . gmdate('l j F Y, H:i:s e', $sNow);
+    echo "\nYour local time is:       " .   date('l j F Y, H:i:s e', $sNow);
+    echo "\nThis local clock is: " . ($cNow==$sNow ? 'OK ' : 'ERR') . ", " .   date('l j F Y, H:i:s e', $cNow);
+    echo "\n";
 } else {
     echo "Failed to read server response\n";
 }
