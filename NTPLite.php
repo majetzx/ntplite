@@ -32,8 +32,7 @@
  * 
  * 
  * @package    NTPLite
- * @author     Jerome Marilleau
- * @copyright  2006-2013 MAJe / TenZenXen
+ * @copyright  (c) 2006-2013 Jerome Marilleau
  * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @link       http://github.com/majetzx/ntplite
  * @version    1.5 (2013-04-03)
