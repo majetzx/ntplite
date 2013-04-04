@@ -45,7 +45,7 @@
  * 
  * The 4 timestamps (Reference, Originate, Receive and Transmit) are not usual Unix
  * timestamps, they use the 01/01/1900 as epoch. They can be converted to and from
- * DateTime objects using convertTsUnixToSntp() and convertTsSntpToUnix() methods.
+ * DateTime objects using convertDateTimeToSntp() and convertSntpToDateTime() methods.
  * 
  * @package NTPLite
  * @since   1.0
